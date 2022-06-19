@@ -1,0 +1,42 @@
+{
+  "name": "kt-sdk-js-resolver-did-ev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ts": "tsc -w",
+    "doc": "typedoc --readme none --out doc src --module commonjs --target ES5 --tsconfig src/tsconfig.json --name 'Resolver-did-ev'",
+    "postinstall": "rm -rf lib && tsc -p src",
+    "test": "jest --watchAll -i",
+    "build": "tsc --build src/tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@ssh.dev.azure.com:v3/everis-peru/KayTrust/KT-SDK-JS-Resolver-did-ev"
+  },
+  "author": "Jerson Miranda",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/compat-data": "^7.11.0",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/node": "^14.10.2",
+    "babel-jest": "^26.3.0",
+    "browserify-fs": "^1.0.0",
+    "browserify-zlib": "^0.2.0",
+    "http-browserify": "^1.7.0",
+    "https-browserify": "^1.0.0",
+    "jest": "^26.4.2",
+    "jest-cli": "^26.4.2",
+    "jsdoc": "^3.6.6",
+    "ts-jest": "^26.4.1",
+    "typedoc": "^0.19.2",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "did-resolver": "^3.2.0",
+    "mnid": "^0.1.3",
+    "web3": "^1.7.3"
+  }
+}

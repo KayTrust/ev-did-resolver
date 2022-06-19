@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "preserveSymlinks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es5",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "outDir": "../lib",
+    "strictNullChecks": true,
+    "declaration": true,
+    "types": ["node"],
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
