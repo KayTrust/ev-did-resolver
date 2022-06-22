@@ -19,10 +19,12 @@ export const getResolver = () => {
         const authentication: {[key: string]: any} = [];
 
         const events = await Web3Instance.getPastEvent();
+        const readKeys: any = [];
         
         let countKey = 1;
         for (const iterator of events) {
             if (decodeMnid.address.toUpperCase() === iterator.returnValues.identity.toUpperCase()) {
+                if (readKeys.some((x: string) => x === iterator.returnValues.device)) continue;
                 const hasCap = await Web3Instance.hasCap(decodeMnid.address, iterator.returnValues.device, iterator.returnValues.cap);
                 if (hasCap) {
                     authentication.push({
@@ -31,6 +33,7 @@ export const getResolver = () => {
                         "blockchainAccountId": `eip155:${decodeMnid.network}:${decodeMnid.address}`
                     });
                     countKey++;
+                    readKeys.push(iterator.returnValues.device);
                 } 
             }
         }
