@@ -26,7 +26,9 @@ class Web3Instance {
     private static abiProxy: any;
     private static contractInstanceIM: any;
     private static contractInstanceProxy: any;
-    private static lastBlocks: number = 100000;
+    private static baseBlocks: number = 30000000;
+    private static lastBlocks: number = 0;
+    private static bufferSize: number = 100000;
 
     public static setWeb3Instance = (host: string, abiIM: object, addressIM: string, abiProxy: string, headers?: [{ name: string, value: string }]) => {
         Web3Instance.web3Instance = new Web3(new Web3.providers.HttpProvider(host, { timeout: 0, headers }));
@@ -50,15 +52,23 @@ class Web3Instance {
             throw new UnsupportedAbi();
     }
 
+    public static setBaseBlocks = (customBaseBlocks: number) => {
+        Web3Instance.baseBlocks = customBaseBlocks;
+    }
+
     public static setLastBlocks = (customLastBlock: number) => {
         Web3Instance.lastBlocks = customLastBlock;
+    }
+
+    public static setBufferSize = (customBufferSize: number) => {
+        Web3Instance.bufferSize = customBufferSize;
     }
 
     private static getPastEventFromProxy = async (): Promise<Event | null> => {
         let toBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
         let events: Event | null = null;
-        let fromBlock = toBlock - Web3Instance.lastBlocks;
-        
+        let fromBlock = toBlock - Web3Instance.bufferSize;
+
         while (true) {
             const params = {
                 filter: { newOwner: Web3Instance.addressIM },
@@ -71,18 +81,22 @@ class Web3Instance {
                 events = result[0];
                 break;
             }
-            fromBlock -= Web3Instance.lastBlocks
-            toBlock -= Web3Instance.lastBlocks;
+            fromBlock -= Web3Instance.bufferSize
+            toBlock -= Web3Instance.bufferSize;
         }
 
         return events;
     }
 
     public static getPastEventFromIM = async (): Promise<Array<Event>> => {
+        const isOwner = Web3Instance.isOwner();
+        if (!isOwner) return [];
         const proxyResult = await Web3Instance.getPastEventFromProxy() as Event;
-        const baseBlock = (proxyResult.blockNumber - Web3Instance.lastBlocks);
-        let toBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
-        let fromBlock = toBlock - Web3Instance.lastBlocks;
+        const originBlock = (proxyResult.blockNumber - Web3Instance.bufferSize);
+        const baseBlock = Web3Instance.baseBlocks < originBlock ? originBlock : Web3Instance.baseBlocks;
+        let newestBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
+        let toBlock = newestBlock - Web3Instance.lastBlocks;
+        let fromBlock = toBlock - Web3Instance.bufferSize;
         let events: Array<Event> = [];
 
         while (true) {
@@ -95,8 +109,8 @@ class Web3Instance {
             if (result.length !== 0) {
                 events = [...events, ...result];
             }
-            fromBlock -= Web3Instance.lastBlocks
-            toBlock -= Web3Instance.lastBlocks;
+            fromBlock -= Web3Instance.bufferSize
+            toBlock -= Web3Instance.bufferSize;
         }
 
         return events;
@@ -104,6 +118,10 @@ class Web3Instance {
 
     public static hasCap = async (identity: string, device: string, capability: string): Promise<boolean> => {
         return await Web3Instance.contractInstanceIM.methods.hasCap(identity, device, capability).call();
+    }
+
+    public static isOwner = async (): Promise<boolean> => {
+        return await Web3Instance.contractInstanceProxy.methods.isOwner(Web3Instance.addressIM).call();
     }
 }
 

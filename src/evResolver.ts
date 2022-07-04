@@ -4,8 +4,17 @@ import Web3Instance from "./web3"
 
 const mnid = require('mnid');
 
-export const setConfigResolver = (host: string, abiIM: object, address: string, abiProxy: string, headers?: [{ name: string, value: string }]) => {
+type ResolverOptions = {
+    baseBlocks: number | undefined | null
+    lastBlocks: number | undefined | null
+    bufferSize: number | undefined | null
+}
+
+export const setConfigResolver = (host: string, abiIM: object, address: string, abiProxy: string, headers?: [{ name: string, value: string }], options?: ResolverOptions) => {
     Web3Instance.setWeb3Instance(host, abiIM, address, abiProxy, headers);
+    if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
+    if (options?.lastBlocks) Web3Instance.setBaseBlocks(options.lastBlocks);
+    if (options?.bufferSize) Web3Instance.setBaseBlocks(options.bufferSize);
 }
 
 export const getResolver = () => {
@@ -22,25 +31,24 @@ export const getResolver = () => {
         const authentication: {[key: string]: any} = [];
 
         Web3Instance.setContractInstance(decodeMnid.address, 'Proxy');
-        let data: Array<any> = [];
-        if (findEvents) data = (await Web3Instance.getPastEventFromIM()).map(x => x.returnValues);
-        if (keys) data = data.concat(keys);
+        let keysInfo: Array<any> = [];
+        if (findEvents) keysInfo = (await Web3Instance.getPastEventFromIM()).map(x => x.returnValues);
+        if (keys) keysInfo = keysInfo.concat(keys);
         const readKeys: any = [];
         
         let countKey = 1;
 
-        for (const iterator of data) {
+        for (const iterator of keysInfo) {
             if (!iterator.identity || !iterator.device || !iterator.cap) continue;
             if (decodeMnid.address.toUpperCase() === iterator.identity.toUpperCase()) {
                 if (readKeys.some((x: string) => x === iterator.device)) continue;
                 const hasCap = await Web3Instance.hasCap(decodeMnid.address, iterator.device, iterator.cap);
                 if (hasCap) {
                     authentication.push({
-                        "id": `${iterator.device}#keys-${countKey}`,
+                        "id": `${iterator.device}#keys-${countKey++}`,
                         "type": "EcdsaSecp256k1RecoveryMethod2020",
                         "blockchainAccountId": `eip155:${decodeMnid.network}:${decodeMnid.address}`
                     });
-                    countKey++;
                     readKeys.push(iterator.device);
                 } 
             }
