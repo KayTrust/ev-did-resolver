@@ -1,4 +1,4 @@
-export { getResolver, setConfigResolver } from './evResolver';
+export { getResolver, ResolverOptions } from './evResolver';
 
 // import { DIDResolver } from 'did-resolver'
 // import MyMethod from 'mymethod-did-resolver'

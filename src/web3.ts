@@ -29,8 +29,9 @@ class Web3Instance {
     private static baseBlocks: number = 30000000;
     private static lastBlocks: number = 0;
     private static bufferSize: number = 100000;
+    private static searchThreshold: number = 100000;
 
-    public static setWeb3Instance = (host: string, abiIM: object, addressIM: string, abiProxy: string, headers?: [{ name: string, value: string }]) => {
+    public static setWeb3Instance = (host: string, abiIM: object, addressIM: string, abiProxy: object, headers?: [{ name: string, value: string }]) => {
         Web3Instance.web3Instance = new Web3(new Web3.providers.HttpProvider(host, { timeout: 0, headers }));
         Web3Instance.web3Instance.eth.handleRevert = true;
         Web3Instance.abiIM = abiIM;
@@ -64,9 +65,13 @@ class Web3Instance {
         Web3Instance.bufferSize = customBufferSize;
     }
 
+    public static setSearchThreshold = (searchThreshold: number) => {
+        Web3Instance.searchThreshold = searchThreshold;
+    }
+
     private static getPastEventFromProxy = async (): Promise<Event | null> => {
         let toBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
-        let events: Event | null = null;
+        let event: Event | null = null;
         let fromBlock = toBlock - Web3Instance.bufferSize;
 
         while (true) {
@@ -78,22 +83,22 @@ class Web3Instance {
             const result = await Web3Instance.contractInstanceProxy.getPastEvents('OwnerAdded', params);
             if (fromBlock <= 0) break;
             if (result.length !== 0) {
-                events = result[0];
+                event = result[0];
                 break;
             }
             fromBlock -= Web3Instance.bufferSize
             toBlock -= Web3Instance.bufferSize;
         }
 
-        return events;
+        return event;
     }
 
     public static getPastEventFromIM = async (): Promise<Array<Event>> => {
         const isOwner = Web3Instance.isOwner();
         if (!isOwner) return [];
         const proxyResult = await Web3Instance.getPastEventFromProxy() as Event;
-        const originBlock = (proxyResult.blockNumber - Web3Instance.bufferSize);
-        const baseBlock = Web3Instance.baseBlocks < originBlock ? originBlock : Web3Instance.baseBlocks;
+        const originBlock = (proxyResult.blockNumber - Web3Instance.searchThreshold);
+        const baseBlock = Math.max(Web3Instance.baseBlocks, originBlock);
         let newestBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
         let toBlock = newestBlock - Web3Instance.lastBlocks;
         let fromBlock = toBlock - Web3Instance.bufferSize;

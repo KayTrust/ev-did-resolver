@@ -1,25 +1,32 @@
-import { DIDDocument, DIDResolutionOptions, ParsedDID, Resolver } from "did-resolver"
+import { ParsedDID, Resolver } from "did-resolver"
 import { InvalidMnid } from "./errors";
 import Web3Instance from "./web3"
 
 const mnid = require('mnid');
 
-type ResolverOptions = {
-    baseBlocks: number | undefined | null
-    lastBlocks: number | undefined | null
-    bufferSize: number | undefined | null
-}
-
-export const setConfigResolver = (host: string, abiIM: object, address: string, abiProxy: string, headers?: [{ name: string, value: string }], options?: ResolverOptions) => {
-    Web3Instance.setWeb3Instance(host, abiIM, address, abiProxy, headers);
-    if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
-    if (options?.lastBlocks) Web3Instance.setBaseBlocks(options.lastBlocks);
-    if (options?.bufferSize) Web3Instance.setBaseBlocks(options.bufferSize);
+export type ResolverOptions = {
+    host: string
+    abiIM: object
+    addressIM: string
+    abiProxy: object
+    headers?: [{ name: string, value: string }]
+    baseBlocks?: number
+    lastBlocks?: number
+    bufferSize?: number
+    searchThreshold?: number
+    findEvents?: boolean
+    keys?: Array<string>
 }
 
 export const getResolver = () => {
-    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolver, options: DIDResolutionOptions): Promise<any> => {
+    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolver, options: ResolverOptions): Promise<any> => {
         
+        Web3Instance.setWeb3Instance(options.host, options.abiIM, options.addressIM, options.abiProxy, options.headers);
+        if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
+        if (options?.lastBlocks) Web3Instance.setLastBlocks(options.lastBlocks);
+        if (options?.bufferSize) Web3Instance.setBufferSize(options.bufferSize);
+        if (options?.searchThreshold) Web3Instance.setSearchThreshold(options.searchThreshold);
+
         let { findEvents = true, keys = [] } = options;
 
         const didParts = did.split(':');
@@ -32,25 +39,27 @@ export const getResolver = () => {
 
         Web3Instance.setContractInstance(decodeMnid.address, 'Proxy');
         let keysInfo: Array<any> = [];
-        if (findEvents) keysInfo = (await Web3Instance.getPastEventFromIM()).map(x => x.returnValues);
+        if (findEvents) keysInfo = (await Web3Instance.getPastEventFromIM()).filter(x => decodeMnid.address.toUpperCase() === x.returnValues.identity.toUpperCase()).map(x =>  x.returnValues.device );
         if (keys) keysInfo = keysInfo.concat(keys);
-        const readKeys: any = [];
-        
-        let countKey = 1;
 
-        for (const iterator of keysInfo) {
-            if (!iterator.identity || !iterator.device || !iterator.cap) continue;
-            if (decodeMnid.address.toUpperCase() === iterator.identity.toUpperCase()) {
-                if (readKeys.some((x: string) => x === iterator.device)) continue;
-                const hasCap = await Web3Instance.hasCap(decodeMnid.address, iterator.device, iterator.cap);
+        let countKey = 1;
+        const readKeys: any = [];
+        const caps = ['fw', 'auth', 'devicemanager', 'admin']
+
+        for (const key of keysInfo) {
+            if (readKeys.some((x: string) => x === key)) continue;
+            let hasCap = false;
+            for (let i = 0; i < caps.length; i++) {
+                hasCap = await Web3Instance.hasCap(decodeMnid.address, key, caps[i]);
                 if (hasCap) {
                     authentication.push({
-                        "id": `${iterator.device}#keys-${countKey++}`,
+                        "id": `${key}#keys-${countKey++}`,
                         "type": "EcdsaSecp256k1RecoveryMethod2020",
                         "blockchainAccountId": `eip155:${decodeMnid.network}:${decodeMnid.address}`
                     });
-                    readKeys.push(iterator.device);
-                } 
+                    readKeys.push(key);
+                    break;
+                }
             }
         }
         
