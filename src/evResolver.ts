@@ -13,21 +13,22 @@ export type ResolverOptions = {
     baseBlocks?: number
     lastBlocks?: number
     bufferSize?: number
-    searchThreshold?: number
+    startBlockMargin?: number
     findEvents?: boolean
     keys?: Array<string>
 }
 
-export const getResolver = () => {
-    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolver, options: ResolverOptions): Promise<any> => {
+export const getResolver = (options: ResolverOptions) => {
         
-        Web3Instance.setWeb3Instance(options.host, options.abiIM, options.addressIM, options.abiProxy, options.headers);
-        if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
-        if (options?.lastBlocks) Web3Instance.setLastBlocks(options.lastBlocks);
-        if (options?.bufferSize) Web3Instance.setBufferSize(options.bufferSize);
-        if (options?.searchThreshold) Web3Instance.setSearchThreshold(options.searchThreshold);
+    Web3Instance.setWeb3Instance(options.host, options.abiIM, options.addressIM, options.abiProxy, options.headers);
+    if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
+    if (options?.lastBlocks) Web3Instance.setLastBlocks(options.lastBlocks);
+    if (options?.bufferSize) Web3Instance.setBufferSize(options.bufferSize);
+    if (options?.startBlockMargin) Web3Instance.setStartBlockMargin(options.startBlockMargin);
 
-        let { findEvents = true, keys = [] } = options;
+    let { findEvents = true, keys = [] } = options;
+    
+    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolver, _options: any): Promise<any> => {
 
         const didParts = did.split(':');
         const mnidToDecode = didParts[2];

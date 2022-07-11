@@ -29,7 +29,7 @@ class Web3Instance {
     private static baseBlocks: number = 30000000;
     private static lastBlocks: number = 0;
     private static bufferSize: number = 100000;
-    private static searchThreshold: number = 100000;
+    private static startBlockMargin: number = 100000;
 
     public static setWeb3Instance = (host: string, abiIM: object, addressIM: string, abiProxy: object, headers?: [{ name: string, value: string }]) => {
         Web3Instance.web3Instance = new Web3(new Web3.providers.HttpProvider(host, { timeout: 0, headers }));
@@ -65,8 +65,8 @@ class Web3Instance {
         Web3Instance.bufferSize = customBufferSize;
     }
 
-    public static setSearchThreshold = (searchThreshold: number) => {
-        Web3Instance.searchThreshold = searchThreshold;
+    public static setStartBlockMargin = (startBlockMargin: number) => {
+        Web3Instance.startBlockMargin = startBlockMargin;
     }
 
     private static getPastEventFromProxy = async (): Promise<Event | null> => {
@@ -97,7 +97,7 @@ class Web3Instance {
         const isOwner = Web3Instance.isOwner();
         if (!isOwner) return [];
         const proxyResult = await Web3Instance.getPastEventFromProxy() as Event;
-        const originBlock = (proxyResult.blockNumber - Web3Instance.searchThreshold);
+        const originBlock = (proxyResult.blockNumber - Web3Instance.startBlockMargin);
         const baseBlock = Math.max(Web3Instance.baseBlocks, originBlock);
         let newestBlock = await Web3Instance.web3Instance.eth.getBlockNumber();
         let toBlock = newestBlock - Web3Instance.lastBlocks;
