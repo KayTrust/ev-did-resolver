@@ -1,7 +1,7 @@
 {
-  "name": "kt-sdk-js-resolver-did-ev",
+  "name": "ev-did-resolver",
   "version": "1.0.0",
-  "description": "",
+  "description": "Resolve DID documents using the did:ev method, based on Ethereum smart contracts",
   "main": "index.js",
   "scripts": {
     "ts": "tsc -w",
@@ -12,9 +12,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@ssh.dev.azure.com:v3/everis-peru/KayTrust/KT-SDK-JS-Resolver-did-ev"
+    "url": "git@github.com:KayTrust/ev-did-resolver"
   },
-  "author": "Jerson Miranda",
+  "author": "Jerson Miranda (NTT DATA)",
   "license": "ISC",
   "devDependencies": {
     "@babel/compat-data": "^7.11.0",
