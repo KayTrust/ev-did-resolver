@@ -1,4 +1,4 @@
-import { ParsedDID, Resolver } from "did-resolver"
+import { DIDResolutionOptions, ParsedDID, Resolvable } from "did-resolver"
 import { InvalidMnid } from "./errors";
 import Web3Instance from "./web3"
 
@@ -28,7 +28,7 @@ export const getResolver = (options: ResolverOptions) => {
 
     let { findEvents = true, keys = [] } = options;
     
-    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolver, _options: any): Promise<any> => {
+    const resolve = async (did: string, parsed: ParsedDID, didResolver: Resolvable, _options: DIDResolutionOptions): Promise<any> => {
 
         const didParts = did.split(':');
         const mnidToDecode = didParts[2];
