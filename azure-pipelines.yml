@@ -42,6 +42,6 @@ stages:
           - task: Npm@1
             inputs:
               command: publish
-              workingDir: '$(Pipeline.Workspace)/module'
+              workingDir: '$(Pipeline.Workspace)/module/s'
               publishRegistry: useExternalRegistry
               publishEndpoint: 'registry.npmjs.org as davux'
