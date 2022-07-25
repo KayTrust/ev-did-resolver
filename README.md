@@ -1,5 +1,4 @@
 [![npm](https://img.shields.io/npm/dt/ev-did-resolver.svg)](https://www.npmjs.com/package/ev-did-resolver)
-
 # EV DID Resolver
 
 This library is resolve a
@@ -11,15 +10,9 @@ It supports the proposed [Decentralized Identifiers](https://w3c.github.io/did-c
 
 It requires the `did-resolver` library, which is the primary interface for resolving DIDs.
 
-## DID method
+## DID ev specification
 
-To encode a DID, simply prepend `did:ev:[mnid]`
-
-The mnid is a string that is compliant with the Multi-Network ID format. It refers to the Multi-Network identifier of the identity's Proxy contract. An MNID is an encoding of an (address, networkID) pair, so it's possible to compute a DID from an address and networkID pair, and vice versa. Assuming networkIDs are unique and well known, a DID thus allows to discover the specific Proxy contract behind a given DID, and reciprocally.
-
-eg:
-
-`did:ev:cwMLAqQCguxLzd1biFQH4xpy2M7BZXvvcXKZ7`
+https://github.com/KayTrust/did-method-ev 
 
 ## Resolving a DID document
 

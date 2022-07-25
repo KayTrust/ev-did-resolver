@@ -20,7 +20,7 @@ export type ResolverOptions = {
 
 export const getResolver = (options: ResolverOptions) => {
         
-    Web3Instance.setWeb3Instance(options.host, options.abiIM, options.addressIM, options.abiProxy, options.headers);
+    Web3Instance.setWeb3Instance(options.host, options.addressIM, options.headers);
     if (options?.baseBlocks) Web3Instance.setBaseBlocks(options.baseBlocks);
     if (options?.lastBlocks) Web3Instance.setLastBlocks(options.lastBlocks);
     if (options?.bufferSize) Web3Instance.setBufferSize(options.bufferSize);
