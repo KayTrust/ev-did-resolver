@@ -29,3 +29,18 @@ stages:
         targetPath: '$(Pipeline.Workspace)'
         artifact: 'module'
         publishLocation: 'pipeline'
+
+- stage: Publish
+  jobs:
+  - deployment: PublishToNPMJS
+    displayName: Publish to NPM public registry
+    environment: Public NPM registry
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Npm@1
+            inputs:
+              command: publish
+              publishRegistry: useExternalRegistry
+              publishEndpoint: 'registry.npmjs.org as davux'
