@@ -28,8 +28,6 @@ import EvResolver from 'ev-did-resolver'
 
 const evResolverConfig = { 
         host: 'http://localhost:8545',
-        abiIM: [{...}],
-        abiProxy: [{...}],
         addressIM: '0xa6b4540a2bfte8663cba78027c83d0dcb1b7c837',
         headers: []
     };
@@ -69,9 +67,7 @@ const doc = await didResolver.resolve('did:ev:cwMLAqQCguxLzd1biFQH4xpy2M7BZXvvcX
 |Key   | Description  | 
 |---|---|
 | host | RPC node url |
-| abiIM | abi of identity manager |
 | addressIM | address of identity manager |
-| abiProxy | abi for proxy |
 | headers | aditional headers for node authentication |
 | baseBlocks | minimun value for ```fromBlock```. Default ```30000000``` |
 | lastBlocks | last blocks to be taken from ```toBlock```. Default ```0``` |

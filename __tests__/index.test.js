@@ -26,8 +26,6 @@ describe("EV Resolver", () => {
     // it('DIDResolver return a document', () => {
 	// 	const options = {
 	// 		host,
-	// 		abiIM,
-	// 		abiProxy,
 	// 		addressIM,
 	// 		headers
 	// 	}

@@ -6,9 +6,7 @@ const mnid = require('mnid');
 
 export type ResolverOptions = {
     host: string
-    abiIM: object
     addressIM: string
-    abiProxy: object
     headers?: [{ name: string, value: string }]
     baseBlocks?: number
     lastBlocks?: number
