@@ -1,9 +1,9 @@
 [![npm](https://img.shields.io/npm/dt/ev-did-resolver.svg)](https://www.npmjs.com/package/ev-did-resolver)
 # EV DID Resolver
 
-This library is a resolve for ["EV" DID Method](https://github.com/KayTrust/did-method-ev)
+This library is a resolver for ["EV" DID Method](https://github.com/KayTrust/did-method-ev).
 
-It supports the proposed [Decentralized Identifiers](https://w3c.github.io/did-core/#identifier) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io) and wrap them in a [DID Document](https://w3c.github.io/did-core/#did-document-properties).
+It supports the proposed [Decentralized Identifiers](https://www.w3.org/TR/did-core/#identifiers) spec from the [W3C Credentials Community Group](https://www.w3.org/) and wrap them in a [DID Document](https://www.w3.org/TR/did-spec-registries/#did-document-properties).
 
 It requires the `did-resolver` library, which is the primary interface for resolving DIDs.
 
