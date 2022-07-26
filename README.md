@@ -1,26 +1,17 @@
 [![npm](https://img.shields.io/npm/dt/ev-did-resolver.svg)](https://www.npmjs.com/package/ev-did-resolver)
 # EV DID Resolver
 
-This library is resolve a
-[Decentralized Identifiers](https://w3c.github.io/did-core/#identifier) and wrap them in a
-[DID Document](https://w3c.github.io/did-core/#did-document-properties)
+This library is a resolve for ["EV" DID Method](https://github.com/KayTrust/did-method-ev)
 
-It supports the proposed [Decentralized Identifiers](https://w3c.github.io/did-core/#identifier) spec from the
-[W3C Credentials Community Group](https://w3c-ccg.github.io).
+It supports the proposed [Decentralized Identifiers](https://w3c.github.io/did-core/#identifier) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io) and wrap them in a [DID Document](https://w3c.github.io/did-core/#did-document-properties).
 
 It requires the `did-resolver` library, which is the primary interface for resolving DIDs.
 
-## DID ev specification
-
-https://github.com/KayTrust/did-method-ev 
-
 ## Resolving a DID document
 
-The library presents a `resolve()` function that returns a `Promise` returning the DID document. It is not meant to be
-used directly but through the [`did-resolver`](https://github.com/decentralized-identity/did-resolver) aggregator.
+The library presents a `resolve()` function that returns a `Promise` returning the DID document. It is not meant to be used directly but through the [`did-resolver`](https://github.com/decentralized-identity/did-resolver) aggregator.
 
-You can use the `getResolver(config)` method to produce an entry that can be used with the `Resolver`
-constructor:
+You can use the `getResolver(config)` method to produce an entry that can be used with the `Resolver` constructor:
 
 ```javascript
 import { Resolver } from 'did-resolver'
