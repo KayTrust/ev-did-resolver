@@ -55,14 +55,14 @@ const doc = await didResolver.resolve('did:ev:cwMLAqQCguxLzd1biFQH4xpy2M7BZXvvcX
 
 ```evResolverConfig``` accepts this props:
 
-|Key   | Description  | 
-|---|---|
+|Key   | Description  | Default | Notes
+|---|---|---|---
 | host | RPC node url |
-| addressIM | address of identity manager |
-| headers | aditional headers for node authentication |
-| baseBlocks | minimun value for ```fromBlock```. Default ```30000000``` |
-| lastBlocks | last blocks to be taken from ```toBlock```. Default ```0``` |
-| bufferSize | value to search for slices in the entire from-to range. This to avoid possible timeout problems. Default ```100000``` |
-| startBlockMargin | number of blocks as margin for the ```baseBlock```. this to have greater precision in capturing the events. Default ```100000``` |
-| findEvents | enable search in events. Default ```true```  |
-| keys | list of keys as aditional data for validate capabilities and wrap them in a did document. Eg: ```['0x2FD3a895C728652FFe586b0B9e07B47edfC6e3FD']``` |
+| addressIM | Address of the Identity Manager contract |
+| headers | Additional HTTP headers for JSON-RPC calls to node, such as authentication |
+| findEvents | Use Ethereum events as a source for getting the authorized keys. | ```true```  |
+| keys | Use an explicit list of keys as a source for getting the authorized keys. E.g.: ```['0x2FD3a895C728652FFe586b0B9e07B47edfC6e3FD']``` |
+| baseBlocks | Minimun value for ```fromBlock```. | ```30000000``` | Only used when `findEvents` is `true`. 
+| lastBlocks | Last blocks to be taken from ```toBlock```. | ```0``` | Only used when `findEvents` is `true`.
+| bufferSize | Size of the slices in the event searching. Use greater values to search more efficiently, use lower values to avoid possible timeout problems. |```100000``` | Only used when `findEvents` is `true`.
+| startBlockMargin | Web3JS or Besu seem to have a bug where filtering events sometimes ignores events emitted in the early blocks. This setting can be used to work around the issue by starting the filtering on an earlier block number. | ```100000``` | Only used when `findEvents` is `true`.
