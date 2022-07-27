@@ -57,11 +57,11 @@ const doc = await didResolver.resolve('did:ev:cwMLAqQCguxLzd1biFQH4xpy2M7BZXvvcX
 
 |Key   | Description  | Default | Notes
 |---|---|---|---
-| host | RPC node url |
-| addressIM | Address of the Identity Manager contract |
-| headers | Additional HTTP headers for JSON-RPC calls to node, such as authentication |
+| host | RPC node url | (mandatory)
+| addressIM | Address of the Identity Manager contract | (mandatory)
+| headers | Additional HTTP headers for JSON-RPC calls to node, such as authentication | No headers
 | findEvents | Use Ethereum events as a source for getting the authorized keys. | ```true```  |
-| keys | Use an explicit list of keys as a source for getting the authorized keys. E.g.: ```['0x2FD3a895C728652FFe586b0B9e07B47edfC6e3FD']``` |
+| keys | Use an explicit list of keys as a source for getting the authorized keys. E.g.: ```['0x2FD3a895C728652FFe586b0B9e07B47edfC6e3FD']``` | ```[]```
 | baseBlocks | Minimun value for ```fromBlock```. | ```30000000``` | Only used when `findEvents` is `true`. 
 | lastBlocks | Last blocks to be taken from ```toBlock```. | ```0``` | Only used when `findEvents` is `true`.
 | bufferSize | Size of the slices in the event searching. Use greater values to search more efficiently, use lower values to avoid possible timeout problems. |```100000``` | Only used when `findEvents` is `true`.
