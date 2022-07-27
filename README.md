@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/dt/ev-did-resolver.svg)](https://www.npmjs.com/package/ev-did-resolver)
+[![npm](https://img.shields.io/npm/dt/@kaytrust/ev-did-resolver.svg)](https://www.npmjs.com/package/@kaytrust/ev-did-resolver)
 # EV DID Resolver
 
 This library is a resolver for ["EV" DID Method](https://github.com/KayTrust/did-method-ev).
